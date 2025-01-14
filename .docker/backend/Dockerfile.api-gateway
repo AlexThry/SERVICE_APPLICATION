@@ -7,17 +7,20 @@ WORKDIR /app
 # Copy package.json and package-lock.json
 COPY backend/package*.json ./
 
+# Copy the tsconfig.json file
+COPY backend/tsconfig.json ./
+
+# Copy the .conf file
+COPY ./conf.yml ./
+
 # Install dependencies
 RUN npm install
 
 # Copy the source code of the current service
-COPY backend/apps/api-gateway ./usr/src/app
+COPY backend/apps/api-gateway ./
 
 # Copy the shared libraries
-COPY backend/libs ./usr/src/app/libs
-
-# Copy the tsconfig.json file
-COPY backend/tsconfig.json ./
+COPY backend/libs ./libs
 
 # Expose the port the app runs on
 EXPOSE 3000

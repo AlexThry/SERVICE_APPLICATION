@@ -7,17 +7,23 @@ WORKDIR /app
 # Copy package.json and package-lock.json
 COPY backend/package*.json ./
 
+# Copy the tsconfig.json file
+COPY backend/tsconfig.json ./
+
+# Copy the .env file
+COPY ./conf.yml ./
+
 # Install dependencies
 RUN npm install
 
 # Copy the source code of the current service
-COPY backend/apps/chat-microservice ./usr/src/app
+COPY backend/apps/chat-microservice ./
 
 # Copy the shared libraries
-COPY backend/libs ./usr/src/app/libs
+COPY backend/libs ./libs
 
 # Expose the port the app runs on
-EXPOSE 3000
+EXPOSE 3002
 
 # Start the application
-CMD ["npm", "run", "start:microservice"]
+CMD ["npm", "run", "start:chat"]

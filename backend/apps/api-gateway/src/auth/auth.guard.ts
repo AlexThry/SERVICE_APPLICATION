@@ -4,7 +4,8 @@ import { JwtService } from "@nestjs/jwt";
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 
-const config = yaml.load(fs.readFileSync('../conf.yml', 'utf8'));
+const configPath = process.env.CONF_PATH || '../conf.yml';
+const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
 
 const jwtSecret = config.jwtSecret;
 

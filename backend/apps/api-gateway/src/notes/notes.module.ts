@@ -5,15 +5,21 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
     imports: [
-      ClientsModule.register([
-        {
-          name: 'NOTES_CLIENT',
-          transport: Transport.TCP,
-          options: { port: 3003 },
-        },
-      ]),
+        ClientsModule.register([
+            {
+                name: 'NOTES_CLIENT',
+                transport: Transport.RMQ,
+                options: {
+                    urls: [process.env.RABBITMQ_URL || 'amqp://localhost:5672'],
+                    queue: 'notes_queue',
+                    queueOptions: {
+                        durable: false
+                    },
+                },
+            },
+        ]),
     ],
-  controllers: [NotesController],
-  providers: [NotesService],
+    controllers: [NotesController],
+    providers: [NotesService],
 })
 export class NotesModule {}

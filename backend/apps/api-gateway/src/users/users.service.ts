@@ -1,8 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { CreateUserDto } from '../../../../libs/dtos/src/users/create-user.dto';
-import { UpdateUserDto } from '../../../../libs/dtos/src/users/update-user.dto';
 import { ClientProxy } from '@nestjs/microservices';
 import { USERS_PATTERN } from '@app/contracts/users.pattern';
+import { CreateUserDto } from '@app/dtos/users/create-user.dto';
+import { UpdateUserDto } from '@app/dtos/users/update-user.dto';
 
 @Injectable()
 export class UsersService {

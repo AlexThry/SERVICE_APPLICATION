@@ -7,20 +7,23 @@ WORKDIR /app
 # Copy package.json and package-lock.json
 COPY backend/package*.json ./
 
+# Copy the tsconfig.json file
+COPY backend/tsconfig.json ./
+
+# Copy the .env file
+COPY ./conf.yml ./
+
 # Install dependencies
 RUN npm install
 
 # Copy the source code of the current service
-COPY backend/apps/notes-microservice ./usr/src/app
+COPY backend/apps/notes-microservice ./
 
 # Copy the shared libraries
-COPY backend/libs ./usr/src/app/libs
-
-# Build the app
-RUN npm run build
+COPY backend/libs ./libs
 
 # Expose the port the app runs on
-EXPOSE 3000
+EXPOSE 3003
 
 # Start the application
-CMD ["npm", "run", "start:dev"]
+CMD ["npm", "run", "start:users"]

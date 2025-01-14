@@ -9,23 +9,24 @@ import { ChatModule } from './chat/chat.module';
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 
-const config = yaml.load(fs.readFileSync('../conf.yml', 'utf8'));
+const configPath = process.env.CONF_PATH || '../conf.yml';
+const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
 
 const jwtSecret = config.jwtSecret;
 
 @Module({
-  imports: [
-    UsersModule,
-    AuthModule,
-    JwtModule.register({
-      global: true,
-      secret: jwtSecret,
-      signOptions: { expiresIn: '3600s' },
-    }),
-    NotesModule,
-    ChatModule,
-  ],
-  controllers: [ApiGatewayController],
-  providers: [ApiGatewayService],
+    imports: [
+        UsersModule,
+        AuthModule,
+        JwtModule.register({
+            global: true,
+            secret: jwtSecret,
+            signOptions: { expiresIn: '3600s' },
+        }),
+        NotesModule,
+        ChatModule,
+    ],
+    controllers: [ApiGatewayController],
+    providers: [ApiGatewayService],
 })
 export class ApiGatewayModule {}
