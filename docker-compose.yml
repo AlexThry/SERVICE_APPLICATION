@@ -23,11 +23,6 @@ services:
         volumes:
             - ./backend/apps/api-gateway:/usr/src/app
             - /usr/src/app/node_modules
-        develop:
-            watch:
-                - action: sync
-                - path: ./backend/apps/api-gateway
-                - target: /usr/src/app
 
     user-microservice:
         build:
