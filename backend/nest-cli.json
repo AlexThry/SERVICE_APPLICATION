@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/api-gateway/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/api-gateway/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/api-gateway",
+  "projects": {
+    "api-gateway": {
+      "type": "application",
+      "root": "apps/api-gateway",
+      "entryFile": "main",
+      "sourceRoot": "apps/api-gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/api-gateway/tsconfig.app.json"
+      }
+    },
+    "user-microservice": {
+      "type": "application",
+      "root": "apps/user-microservice",
+      "entryFile": "main",
+      "sourceRoot": "apps/user-microservice/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/user-microservice/tsconfig.app.json"
+      }
+    },
+    "dtos": {
+      "type": "library",
+      "root": "libs/dtos",
+      "entryFile": "index",
+      "sourceRoot": "libs/dtos/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/dtos/tsconfig.lib.json"
+      }
+    },
+    "contracts": {
+      "type": "library",
+      "root": "libs/patterns",
+      "entryFile": "index",
+      "sourceRoot": "libs/patterns/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/patterns/tsconfig.lib.json"
+      }
+    },
+    "schemas": {
+      "type": "library",
+      "root": "libs/schemas",
+      "entryFile": "index",
+      "sourceRoot": "libs/schemas/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/schemas/tsconfig.lib.json"
+      }
+    },
+    "messaging-microservice": {
+      "type": "application",
+      "root": "apps/messaging-microservice",
+      "entryFile": "main",
+      "sourceRoot": "apps/messaging-microservice/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/messaging-microservice/tsconfig.app.json"
+      }
+    },
+    "notes-microservice": {
+      "type": "application",
+      "root": "apps/notes-microservice",
+      "entryFile": "main",
+      "sourceRoot": "apps/notes-microservice/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/notes-microservice/tsconfig.app.json"
+      }
+    },
+    "chat-microservice": {
+      "type": "application",
+      "root": "apps/chat-microservice",
+      "entryFile": "main",
+      "sourceRoot": "apps/chat-microservice/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/chat-microservice/tsconfig.app.json"
+      }
+    }
+  }
+}

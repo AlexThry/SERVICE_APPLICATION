@@ -1,0 +1,17 @@
+import { Module } from '@nestjs/common';
+import { NotesMicroserviceController } from './notes-microservice.controller';
+import { NotesMicroserviceService } from './notes-microservice.service';
+import { NotesModule } from './notes/notes.module';
+import { MongooseModule } from '@nestjs/mongoose';
+
+@Module({
+  imports: [
+    NotesModule,
+    MongooseModule.forRoot(
+      'mongodb+srv://alexist103:laS31WAxFPpgAjxV@soaproject.c2z5s.mongodb.net/?retryWrites=true&w=majority&appName=SOAProject',
+    ),
+  ],
+  controllers: [NotesMicroserviceController],
+  providers: [NotesMicroserviceService],
+})
+export class NotesMicroserviceModule {}
