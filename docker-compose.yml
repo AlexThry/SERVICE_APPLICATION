@@ -19,7 +19,7 @@ services:
         networks:
             - app-network
         env_file:
-            - ./global.env
+            - ./.envs/global.backend.env
         volumes:
             - ./backend/apps/api-gateway:/usr/src/app
             - /usr/src/app/node_modules
@@ -36,7 +36,7 @@ services:
         networks:
             - app-network
         env_file:
-            - ./global.env
+            - ./.envs/global.backend.env
         volumes:
             - ./backend/apps/user-microservice:/usr/src/app
             - /usr/src/app/node_modules
@@ -53,7 +53,7 @@ services:
         networks:
             - app-network
         env_file:
-            - ./global.env
+            - ./.envs/global.backend.env
         volumes:
             - ./backend/apps/chat-microservice:/usr/src/app
             - /usr/src/app/node_modules
@@ -70,11 +70,46 @@ services:
         networks:
             - app-network
         env_file:
-            - ./global.env
+            - ./.envs/global.backend.env
         volumes:
             - ./backend/apps/notes-microservice:/usr/src/app
             - /usr/src/app/node_modules
 
+    ####Frontend####
+    main:
+        build:
+            context: .
+            dockerfile: ./.docker/frontend/Dockerfile.main
+        ports:
+            - "5173:5173"
+        env_file:
+            - ./.envs/global.frontend.env
+        networks:
+            - app-network
+    messaging:
+        build:
+            context: .
+            dockerfile: ./.docker/frontend/Dockerfile.messaging
+        ports:
+            - "5002:5002"
+        env_file:
+            - ./.envs/global.frontend.env
+        networks:
+            - app-network
+    notes:
+        build:
+            context: .
+            dockerfile: ./.docker/frontend/Dockerfile.notes
+        ports:
+            - "5001:5001"
+        env_file:
+            - ./.envs/global.frontend.env
+        networks:
+            - app-network
+
+    ####TipTap####
+
+    ####RabbitMQ####
     rabbitmq:
         image: rabbitmq:3-management-alpine
         container_name: 'rabbitmq'
@@ -91,6 +126,17 @@ services:
             interval: 5s
             timeout: 10s
             retries: 10
+
+    ####Mongo####
+    mongo:
+        image: mongo:latest
+        container_name: 'mongo'
+        ports:
+            - '27017:27017'
+        volumes:
+            - ~/.docker-conf/mongo/data:/data/db
+        networks:
+            - app-network
 
 networks:
     app-network:

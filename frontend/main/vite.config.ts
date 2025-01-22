@@ -20,7 +20,7 @@ export default defineConfig({
     },
     preview: {
         host: 'localhost',
-        port: 5000,
+        port: 5173,
         strictPort: true,
         headers: {
             'Access-Control-Allow-Origin': '*',
