@@ -1,31 +1,24 @@
-import React, { useState } from 'react';
-
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-const Editor = React.lazy(() => import('notes/Editor'))
+const Editor = React.lazy(() => import('notes/Editor'));
 import { Suspense } from 'react';
 
 function NotesPage() {
-
-    const [noteId, setNoteId] = useState('');
+    const { id: paramNoteId } = useParams();
+    const [noteId, setNoteId] = useState(paramNoteId || '');
 
     const navigate = useNavigate();
 
-    const { id } = useParams();
-
     useEffect(() => {
-        setNoteId(id || '');
-    }, [id, navigate])
-
-    useEffect(() => {
-        if (noteId) {
+        if (noteId && noteId !== paramNoteId) {
             navigate(`/notes/${noteId}`);
         }
-    }, [noteId, history]);
+        
+    }, [noteId]);
 
     return (
         <Suspense fallback={<div>Loading...</div>}>
-            <Editor noteId={noteId} setNoteId={setNoteId}/>
+            <Editor noteId={noteId} setNoteId={setNoteId} />
         </Suspense>
     );
 }

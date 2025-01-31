@@ -23,13 +23,39 @@ export class EditorService {
         }
     }
 
-    async getNote(noteId: string): Promise<string> {
+    async getNote(noteId: string): Promise<string> {        
         try {
             const response = await axios.get(`http://localhost:3000/notes/${noteId}`);
             return response.data;
         } catch (error) {
             console.error('Error fetching content:', error);
             throw error;
+        }
+    }
+
+    async createNote(userId: string, title: string) {
+        try {
+            const response = await axios.post('http://localhost:3000/notes', {
+            userId,
+            title
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error creating note:', error);
+            throw error;
+        }
+
+    }
+
+    async addUserToNote(noteId: string, userId: string) {
+        try {
+            const response = await axios.put('http://localhost:3000/notes/addUser', {
+                noteId,
+                userId
+            })
+            return response.status
+        } catch (error) {
+            return
         }
     }
 }

@@ -8,13 +8,15 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         ClientsModule.register([
             {
                 name: 'NOTES_CLIENT',
-                transport: Transport.RMQ,
+                transport: Transport.KAFKA,
                 options: {
-                    urls: [process.env.RABBITMQ_URL || 'amqp://localhost:5672'],
-                    queue: 'notes_queue',
-                    queueOptions: {
-                        durable: false
+                    client: {
+                        brokers: ['kafka:9092'],
                     },
+                    consumer: {
+                        groupId: 'notes-consumer'
+
+                    }
                 },
             },
         ]),

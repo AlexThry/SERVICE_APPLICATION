@@ -229,7 +229,11 @@ let UserMicroserviceModule = class UserMicroserviceModule {
 exports.UserMicroserviceModule = UserMicroserviceModule;
 exports.UserMicroserviceModule = UserMicroserviceModule = __decorate([
     (0, common_1.Module)({
-        imports: [users_module_1.UsersModule, auth_module_1.AuthModule, mongoose_1.MongooseModule.forRoot('mongodb+srv://alexist103:laS31WAxFPpgAjxV@soaproject.c2z5s.mongodb.net/?retryWrites=true&w=majority&appName=SOAProject')],
+        imports: [
+            users_module_1.UsersModule,
+            auth_module_1.AuthModule,
+            mongoose_1.MongooseModule.forRoot('mongodb://mongo:27017/'),
+        ],
         controllers: [user_microservice_controller_1.UserMicroserviceController],
         providers: [user_microservice_service_1.UserMicroserviceService],
     })
@@ -631,8 +635,14 @@ const user_microservice_module_1 = __webpack_require__(/*! ./user-microservice.m
 const microservices_1 = __webpack_require__(/*! @nestjs/microservices */ "@nestjs/microservices");
 async function bootstrap() {
     const app = await core_1.NestFactory.createMicroservice(user_microservice_module_1.UserMicroserviceModule, {
-        transport: microservices_1.Transport.TCP,
-        options: { port: 3001 },
+        transport: microservices_1.Transport.RMQ,
+        options: {
+            urls: [process.env.RABBITMQ_URL || 'amqp://localhost:5672'],
+            queue: 'users_queue',
+            queueOptions: {
+                durable: false
+            },
+        },
     });
     await app.listen();
 }

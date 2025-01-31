@@ -73,7 +73,7 @@ exports.NotesMicroserviceModule = NotesMicroserviceModule = __decorate([
     (0, common_1.Module)({
         imports: [
             notes_module_1.NotesModule,
-            mongoose_1.MongooseModule.forRoot('mongodb+srv://alexist103:laS31WAxFPpgAjxV@soaproject.c2z5s.mongodb.net/?retryWrites=true&w=majority&appName=SOAProject'),
+            mongoose_1.MongooseModule.forRoot('mongodb://mongo:27017/'),
         ],
         controllers: [notes_microservice_controller_1.NotesMicroserviceController],
         providers: [notes_microservice_service_1.NotesMicroserviceService],
@@ -546,8 +546,12 @@ const notes_microservice_module_1 = __webpack_require__(/*! ./notes-microservice
 const microservices_1 = __webpack_require__(/*! @nestjs/microservices */ "@nestjs/microservices");
 async function bootstrap() {
     const app = await core_1.NestFactory.createMicroservice(notes_microservice_module_1.NotesMicroserviceModule, {
-        transport: microservices_1.Transport.TCP,
-        options: { port: 3003 },
+        transport: microservices_1.Transport.KAFKA,
+        options: {
+            client: {
+                brokers: ['localhost:9092'],
+            }
+        },
     });
     await app.listen();
 }

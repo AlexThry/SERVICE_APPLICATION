@@ -1,0 +1,24 @@
+# Utiliser l'image Node-RED officielle comme base
+FROM nodered/node-red:latest
+
+USER root
+
+# Copier les fichiers de configuration dans le conteneur
+COPY nodered/settings.js /data/settings.js
+COPY nodered/flows.json /data/flows.json
+
+# Copier le script entrypoint.sh dans le conteneur
+COPY nodered/entrypoint.sh /data/entrypoint.sh
+RUN chmod +x /data/entrypoint.sh
+
+USER node-red
+
+
+# Définir le répertoire de travail par défaut
+WORKDIR /data
+
+# Exposer le port par défaut de Node-RED
+EXPOSE 1880
+
+# Démarrer Node-RED
+ENTRYPOINT ["/data/entrypoint.sh"]

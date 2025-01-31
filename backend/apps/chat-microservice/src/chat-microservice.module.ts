@@ -8,7 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose';
   imports: [
     ChatModule,
     MongooseModule.forRoot(
-      'mongodb+srv://alexist103:laS31WAxFPpgAjxV@soaproject.c2z5s.mongodb.net/?retryWrites=true&w=majority&appName=SOAProject',
+      'mongodb://mongo:27017/',
     ),
   ],
   controllers: [ChatMicroserviceController],

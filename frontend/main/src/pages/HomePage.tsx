@@ -1,10 +1,28 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
+import { HomeService } from '../services/HomeService';
 
 function HomePage() {
     const navigate = useNavigate();
+    const homeService = new HomeService();
+    const [splash, setSplash] = useState('');
+    const [username, setUsername] = useState('');
+
+    async function fetchSplash() {
+        const splash = await homeService.getSplash();
+        setSplash(splash);
+    }
 
     useEffect(() => {
+        fetchSplash();
+
+        if (sessionStorage.getItem('user')) {
+            const user = sessionStorage.getItem('user');
+            if (user) {
+                setUsername(user);
+            }
+        }
+
         const token = sessionStorage.getItem('access_token');
 
         if (!token) {
@@ -21,12 +39,23 @@ function HomePage() {
     return (
         <>
             <div className="hero bg-base-300 h-full">
-                <div className="hero-content text-center">
+                <div className="relative hero-content text-center">
+                    <div className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rotate-45 text-blue-600">
+                        {splash}
+                    </div>
                     <div className="max-w-md">
-                        <h1 className="text-5xl font-bold">Welcome to SOA</h1>
+                        {(username && (
+                            <h1 className="text-5xl font-bold">
+                                Welcome {username}
+                            </h1>
+                        )) || (
+                            <h1 className="text-5xl font-bold">
+                                Welcome to SOA
+                            </h1>
+                        )}
                         <p className="py-6">
-                            A tiny and fast note taker, that allow you to share
-                            and save your files as you wish to.
+                            SOA is a tiny and fast note taker, that allow you to share
+                            and save your files as you wish to (not yet).
                         </p>
                         <Link to="/notes" className="btn btn-primary">
                             Get Started

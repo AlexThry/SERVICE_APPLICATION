@@ -27,7 +27,7 @@ function Modal({ setIsModalOpen, content }: ModalProps) {
                         />
                     </svg>
                 </div>
-                <div className="h-full w-full p-4">{content}</div>
+                <div className="h-full w-full p-8 dark:bg-gray-800 dark:text-white">{content}</div>
             </div>
         </>
     );

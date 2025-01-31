@@ -6,7 +6,7 @@ function AuthLayout() {
     const {theme, setTheme} = useContext(AppContext);
 
     const toggleTheme = () => {
-        setTheme(theme === 'light' ? 'synthwave' : 'light');
+        setTheme(theme === 'light' ? 'dark' : 'light');
     };
 
     useEffect(() => {
@@ -23,7 +23,7 @@ function AuthLayout() {
                     <input
                         type="checkbox"
                         className="theme-controller"
-                        value="synthwave"
+                        value="dark"
                         onClick={toggleTheme}
                     />
 

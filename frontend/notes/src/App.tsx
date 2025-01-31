@@ -3,9 +3,7 @@ import * as Y from 'yjs';
 import './style.scss';
 
 import Editor from './features/Editor';
-import Modal from './components/Modal';
 import { useEffect, useState } from 'react';
-import FileList from './components/FileList';
 import { EditorService } from './services/Editor.service';
 
 const ydoc = new Y.Doc();
@@ -16,16 +14,28 @@ interface AppProps {
 }
 
 function App({ noteId, setNoteId }: AppProps) {
-    const provider = new HocuspocusProvider({
-        url: 'ws://localhost:1234',
-        name: noteId || '',
-        document: ydoc,
-    });
+    const [provider, setProvider] = useState<HocuspocusProvider | null>(null);
+
+    useEffect(() => {
+        if (provider) {
+            provider.destroy(); // Détruire l'ancien provider
+        }
+
+        const newProvider = new HocuspocusProvider({
+            url: 'ws://localhost:1234',
+            name: noteId || '',
+            document: ydoc,
+        });
+
+        setProvider(newProvider);
+
+        return () => {
+            newProvider.destroy(); // Nettoyer le provider lors du démontage
+        };
+    }, [noteId]);
 
     const editorService = new EditorService();
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [file, setFile] = useState('');
     const [noteList, setNoteList] = useState<
         { hasNextPage: boolean; notes: { title: String; id: string }[] }[]
     >([]);
@@ -48,33 +58,21 @@ function App({ noteId, setNoteId }: AppProps) {
                     })
                 );
                 setNoteList(filteredNotes);
-                console.log(filteredNotes);
             });
     }, []);
 
     return (
         <>
-            <button
-                onClick={() => setIsModalOpen(true)}
-                className="absolute btn z-50 top-0">
-                Choose File
-            </button>
             <div className="flex h-full w-full">
-                {isModalOpen && (
-                    <Modal
-                        setIsModalOpen={setIsModalOpen}
-                        content={
-                            <FileList files={noteList} setFileId={setNoteId} />
-                        }
+                {provider && (
+                    <Editor
+                        provider={provider}
+                        ydoc={ydoc}
+                        noteId={noteId || ''}
+                        setNoteId={setNoteId}
+                        noteList={noteList}
                     />
                 )}
-                <Editor
-                    provider={provider}
-                    ydoc={ydoc}
-                    documentId={noteId || ''}
-                    initialValue={file || ''}
-					setDocumentId={setFile}
-                />
             </div>
         </>
     );

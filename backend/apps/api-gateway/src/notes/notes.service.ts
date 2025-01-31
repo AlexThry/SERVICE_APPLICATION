@@ -1,13 +1,24 @@
 import { NOTE_PATTERN } from '@app/contracts/notes.pattern';
-import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { ClientKafka, ClientProxy } from '@nestjs/microservices';
 import * as Yjs from 'yjs';
 
 @Injectable()
-export class NotesService {
+export class NotesService implements OnModuleInit {
     constructor(
-        @Inject('NOTES_CLIENT') private readonly noteClient: ClientProxy,
+        @Inject('NOTES_CLIENT') private readonly noteClient: ClientKafka,
     ) {}
+
+    async onModuleInit() {
+        this.noteClient.subscribeToResponseOf(NOTE_PATTERN.CREATE)
+        this.noteClient.subscribeToResponseOf(NOTE_PATTERN.FIND_ALL)
+        this.noteClient.subscribeToResponseOf(NOTE_PATTERN.FIND_ALL_BY_USER)
+        this.noteClient.subscribeToResponseOf(NOTE_PATTERN.FIND_ONE)
+        this.noteClient.subscribeToResponseOf(NOTE_PATTERN.UPDATE)
+        this.noteClient.subscribeToResponseOf(NOTE_PATTERN.ADD_USER)
+        this.noteClient.subscribeToResponseOf(NOTE_PATTERN.REMOVE)
+    }
+
     createNote(userId: string, title: string) {
         return this.noteClient.send(NOTE_PATTERN.CREATE, {
             userId: userId,

@@ -62,7 +62,8 @@ const notes_module_1 = __webpack_require__(/*! ./notes/notes.module */ "./apps/a
 const chat_module_1 = __webpack_require__(/*! ./chat/chat.module */ "./apps/api-gateway/src/chat/chat.module.ts");
 const fs = __webpack_require__(/*! fs */ "fs");
 const yaml = __webpack_require__(/*! js-yaml */ "js-yaml");
-const config = yaml.load(fs.readFileSync('../conf.yml', 'utf8'));
+const configPath = process.env.CONF_PATH || '../conf.yml';
+const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
 const jwtSecret = config.jwtSecret;
 let ApiGatewayModule = class ApiGatewayModule {
 };
@@ -209,7 +210,8 @@ const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const jwt_1 = __webpack_require__(/*! @nestjs/jwt */ "@nestjs/jwt");
 const fs = __webpack_require__(/*! fs */ "fs");
 const yaml = __webpack_require__(/*! js-yaml */ "js-yaml");
-const config = yaml.load(fs.readFileSync('../conf.yml', 'utf8'));
+const configPath = process.env.CONF_PATH || '../conf.yml';
+const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
 const jwtSecret = config.jwtSecret;
 let AuthGuard = class AuthGuard {
     constructor(jwtService) {
@@ -274,8 +276,14 @@ exports.AuthModule = AuthModule = __decorate([
             microservices_1.ClientsModule.register([
                 {
                     name: 'USERS_CLIENT',
-                    transport: microservices_1.Transport.TCP,
-                    options: { port: 3001 },
+                    transport: microservices_1.Transport.RMQ,
+                    options: {
+                        urls: [process.env.RABBITMQ_URL || 'amqp://localhost:5672'],
+                        queue: 'users_queue',
+                        queueOptions: {
+                            durable: false,
+                        },
+                    },
                 },
             ]),
         ],
@@ -450,8 +458,14 @@ exports.ChatModule = ChatModule = __decorate([
             microservices_1.ClientsModule.register([
                 {
                     name: 'CHAT_CLIENT',
-                    transport: microservices_1.Transport.TCP,
-                    options: { port: 3002 },
+                    transport: microservices_1.Transport.RMQ,
+                    options: {
+                        urls: [process.env.RABBITMQ_URL || 'amqp://localhost:5672'],
+                        queue: 'chat_queue',
+                        queueOptions: {
+                            durable: false
+                        },
+                    },
                 },
             ]),
             auth_module_1.AuthModule,
@@ -639,8 +653,16 @@ exports.NotesModule = NotesModule = __decorate([
             microservices_1.ClientsModule.register([
                 {
                     name: 'NOTES_CLIENT',
-                    transport: microservices_1.Transport.TCP,
-                    options: { port: 3003 },
+                    transport: microservices_1.Transport.KAFKA,
+                    options: {
+                        client: {
+                            clientId: 'notes',
+                            brokers: ['localhost:9092'],
+                        },
+                        consumer: {
+                            groupId: 'notes-consumer'
+                        }
+                    },
                 },
             ]),
         ],
@@ -746,8 +768,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const users_service_1 = __webpack_require__(/*! ./users.service */ "./apps/api-gateway/src/users/users.service.ts");
-const create_user_dto_1 = __webpack_require__(/*! ../../../../libs/dtos/src/users/create-user.dto */ "./libs/dtos/src/users/create-user.dto.ts");
-const update_user_dto_1 = __webpack_require__(/*! ../../../../libs/dtos/src/users/update-user.dto */ "./libs/dtos/src/users/update-user.dto.ts");
+const create_user_dto_1 = __webpack_require__(/*! @app/dtos/users/create-user.dto */ "./libs/dtos/src/users/create-user.dto.ts");
+const update_user_dto_1 = __webpack_require__(/*! @app/dtos/users/update-user.dto */ "./libs/dtos/src/users/update-user.dto.ts");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
@@ -840,8 +862,14 @@ exports.UsersModule = UsersModule = __decorate([
             microservices_1.ClientsModule.register([
                 {
                     name: 'USERS_CLIENT',
-                    transport: microservices_1.Transport.TCP,
-                    options: { port: 3001 },
+                    transport: microservices_1.Transport.RMQ,
+                    options: {
+                        urls: [process.env.RABBITMQ_URL || 'amqp://localhost:5672'],
+                        queue: 'users_queue',
+                        queueOptions: {
+                            durable: false
+                        },
+                    },
                 },
             ]),
         ],

@@ -20,6 +20,14 @@ export default defineConfig({
         target: 'esnext',
         minify: false,
         cssCodeSplit: false,
+        rollupOptions: {
+            output: {
+                format: 'esm',
+                entryFileNames: 'assets/[name].js',
+                chunkFileNames: 'assets/[name].js',
+                assetFileNames: 'assets/[name].[ext]'
+            }
+        }
     },
     preview: {
         host: 'localhost',

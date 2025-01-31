@@ -6,7 +6,7 @@ function Menu() {
     const { theme, setTheme } = useContext(AppContext);
 
     const toggleTheme = () => {
-        setTheme(theme === 'light' ? 'synthwave' : 'light');
+        setTheme(theme === 'light' ? 'dark' : 'light');
     };
 
     useEffect(() => {
@@ -59,7 +59,7 @@ function Menu() {
                     <input
                         type="checkbox"
                         className="theme-controller"
-                        value="synthwave"
+                        value="dark"
                         onClick={toggleTheme}
                     />
                     <svg

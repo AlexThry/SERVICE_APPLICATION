@@ -73,7 +73,7 @@ exports.ChatMicroserviceModule = ChatMicroserviceModule = __decorate([
     (0, common_1.Module)({
         imports: [
             chat_module_1.ChatModule,
-            mongoose_1.MongooseModule.forRoot('mongodb+srv://alexist103:laS31WAxFPpgAjxV@soaproject.c2z5s.mongodb.net/?retryWrites=true&w=majority&appName=SOAProject'),
+            mongoose_1.MongooseModule.forRoot('mongodb://mongo:27017/'),
         ],
         controllers: [chat_microservice_controller_1.ChatMicroserviceController],
         providers: [chat_microservice_service_1.ChatMicroserviceService],
@@ -717,15 +717,21 @@ const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const platform_socket_io_1 = __webpack_require__(/*! @nestjs/platform-socket.io */ "@nestjs/platform-socket.io");
 async function bootstrap() {
     const logger = new common_1.Logger('Bootstrap');
-    const tcpMicroservice = await core_1.NestFactory.createMicroservice(chat_microservice_module_1.ChatMicroserviceModule, {
-        transport: microservices_1.Transport.TCP,
-        options: { port: 3002 },
+    const rmqMicroservice = await core_1.NestFactory.createMicroservice(chat_microservice_module_1.ChatMicroserviceModule, {
+        transport: microservices_1.Transport.RMQ,
+        options: {
+            urls: [process.env.RABBITMQ_URL || 'amqp://localhost:5672'],
+            queue: 'chat_queue',
+            queueOptions: {
+                durable: false
+            },
+        },
     });
-    tcpMicroservice.listen();
+    rmqMicroservice.listen();
     const app = await core_1.NestFactory.create(chat_microservice_module_1.ChatMicroserviceModule);
     app.useWebSocketAdapter(new platform_socket_io_1.IoAdapter(app));
     await app.listen(4000);
-    logger.log('WebSocket Server is running on port 3003');
+    logger.log('WebSocket Server is running on port 4000');
 }
 bootstrap();
 

@@ -1,0 +1,11 @@
+FROM node:23
+
+WORKDIR /app
+
+COPY ./tip-tap-backend/ ./
+
+RUN npm install
+
+EXPOSE 1234
+
+CMD [ "npm", "run", "start" ]
