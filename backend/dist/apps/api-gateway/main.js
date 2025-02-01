@@ -653,15 +653,13 @@ exports.NotesModule = NotesModule = __decorate([
             microservices_1.ClientsModule.register([
                 {
                     name: 'NOTES_CLIENT',
-                    transport: microservices_1.Transport.KAFKA,
+                    transport: microservices_1.Transport.RMQ,
                     options: {
-                        client: {
-                            clientId: 'notes',
-                            brokers: ['localhost:9092'],
+                        urls: [process.env.RABBITMQ_URL || 'amqp://localhost:5672'],
+                        queue: 'notes_queue',
+                        queueOptions: {
+                            durable: false
                         },
-                        consumer: {
-                            groupId: 'notes-consumer'
-                        }
                     },
                 },
             ]),

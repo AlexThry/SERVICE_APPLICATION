@@ -8,7 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose';
   imports: [
     NotesModule,
     MongooseModule.forRoot(
-      'mongodb://mongo:27017/',
+      'mongodb://localhost:27017/',
     ),
   ],
   controllers: [NotesMicroserviceController],

@@ -73,7 +73,7 @@ exports.ChatMicroserviceModule = ChatMicroserviceModule = __decorate([
     (0, common_1.Module)({
         imports: [
             chat_module_1.ChatModule,
-            mongoose_1.MongooseModule.forRoot('mongodb://mongo:27017/'),
+            mongoose_1.MongooseModule.forRoot('mongodb://localhost:27017/'),
         ],
         controllers: [chat_microservice_controller_1.ChatMicroserviceController],
         providers: [chat_microservice_service_1.ChatMicroserviceService],

@@ -232,7 +232,7 @@ exports.UserMicroserviceModule = UserMicroserviceModule = __decorate([
         imports: [
             users_module_1.UsersModule,
             auth_module_1.AuthModule,
-            mongoose_1.MongooseModule.forRoot('mongodb://mongo:27017/'),
+            mongoose_1.MongooseModule.forRoot('mongodb://localhost:27017/'),
         ],
         controllers: [user_microservice_controller_1.UserMicroserviceController],
         providers: [user_microservice_service_1.UserMicroserviceService],

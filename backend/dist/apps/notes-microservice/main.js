@@ -73,7 +73,7 @@ exports.NotesMicroserviceModule = NotesMicroserviceModule = __decorate([
     (0, common_1.Module)({
         imports: [
             notes_module_1.NotesModule,
-            mongoose_1.MongooseModule.forRoot('mongodb://mongo:27017/'),
+            mongoose_1.MongooseModule.forRoot('mongodb://localhost:27017/'),
         ],
         controllers: [notes_microservice_controller_1.NotesMicroserviceController],
         providers: [notes_microservice_service_1.NotesMicroserviceService],
@@ -546,11 +546,13 @@ const notes_microservice_module_1 = __webpack_require__(/*! ./notes-microservice
 const microservices_1 = __webpack_require__(/*! @nestjs/microservices */ "@nestjs/microservices");
 async function bootstrap() {
     const app = await core_1.NestFactory.createMicroservice(notes_microservice_module_1.NotesMicroserviceModule, {
-        transport: microservices_1.Transport.KAFKA,
+        transport: microservices_1.Transport.RMQ,
         options: {
-            client: {
-                brokers: ['localhost:9092'],
-            }
+            urls: [process.env.RABBITMQ_URL || 'amqp://localhost:5672'],
+            queue: 'notes_queue',
+            queueOptions: {
+                durable: false
+            },
         },
     });
     await app.listen();

@@ -4,20 +4,20 @@ import { ClientKafka, ClientProxy } from '@nestjs/microservices';
 import * as Yjs from 'yjs';
 
 @Injectable()
-export class NotesService implements OnModuleInit {
+export class NotesService {
     constructor(
-        @Inject('NOTES_CLIENT') private readonly noteClient: ClientKafka,
+        @Inject('NOTES_CLIENT') private readonly noteClient: ClientProxy,
     ) {}
 
-    async onModuleInit() {
-        this.noteClient.subscribeToResponseOf(NOTE_PATTERN.CREATE)
-        this.noteClient.subscribeToResponseOf(NOTE_PATTERN.FIND_ALL)
-        this.noteClient.subscribeToResponseOf(NOTE_PATTERN.FIND_ALL_BY_USER)
-        this.noteClient.subscribeToResponseOf(NOTE_PATTERN.FIND_ONE)
-        this.noteClient.subscribeToResponseOf(NOTE_PATTERN.UPDATE)
-        this.noteClient.subscribeToResponseOf(NOTE_PATTERN.ADD_USER)
-        this.noteClient.subscribeToResponseOf(NOTE_PATTERN.REMOVE)
-    }
+    // async onModuleInit() {
+    //     this.noteClient.subscribeToResponseOf(NOTE_PATTERN.CREATE)
+    //     this.noteClient.subscribeToResponseOf(NOTE_PATTERN.FIND_ALL)
+    //     this.noteClient.subscribeToResponseOf(NOTE_PATTERN.FIND_ALL_BY_USER)
+    //     this.noteClient.subscribeToResponseOf(NOTE_PATTERN.FIND_ONE)
+    //     this.noteClient.subscribeToResponseOf(NOTE_PATTERN.UPDATE)
+    //     this.noteClient.subscribeToResponseOf(NOTE_PATTERN.ADD_USER)
+    //     this.noteClient.subscribeToResponseOf(NOTE_PATTERN.REMOVE)
+    // }
 
     createNote(userId: string, title: string) {
         return this.noteClient.send(NOTE_PATTERN.CREATE, {

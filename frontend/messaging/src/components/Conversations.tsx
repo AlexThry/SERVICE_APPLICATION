@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ChatService } from '../services/ChatService';
 import Conversation from './Conversation';
 import { ConversationObject } from '../objects/ConversationObject';
+import Modal from './Modal';
 
 interface ConversationsProps {
     lastConversation?: string;
@@ -17,6 +18,7 @@ function Conversations({
     const [conversations, setConversations] = useState<ConversationObject[]>(
         []
     );
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     async function getUserConversations() {
         const userId = sessionStorage.getItem('user_id');
@@ -62,6 +64,25 @@ function Conversations({
         }
     };
 
+    const handleNewConversation = () => {
+        console.log('Opening modal...');
+        setIsModalOpen(true);
+    };
+
+    const handleUserSelect = async (participantId: string) => {
+        const userId = sessionStorage.getItem('user_id');
+        if (userId) {
+            const userIds = [userId, participantId];
+            try {
+                const newConversation = await chatService.createConversation(userIds, '');
+                setConversations((prevConversations) => [newConversation, ...prevConversations]);
+                setIsModalOpen(false);
+            } catch (error) {
+                console.error('Error creating conversation:', error);
+            }
+        }
+    };
+
     useEffect(() => {
         getUserConversations();
     }, []);
@@ -76,21 +97,11 @@ function Conversations({
         <>
             <div className="flex px-2 flex-col gap-2">
                 <h1 className="text-2xl font-bold py-2">Conversations</h1>
-                <label className="input input-bordered flex items-center gap-2">
-                    <input type="text" className="grow" placeholder="Search" />
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 16 16"
-                        fill="currentColor"
-                        className="h-4 w-4 opacity-70">
-                        <path
-                            fillRule="evenodd"
-                            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                            clipRule="evenodd"
-                        />
-                    </svg>
-                </label>
+               <button className="btn" onClick={handleNewConversation}>New Conversation</button>
             </div>
+            {isModalOpen && (
+                <Modal setIsModalOpen={setIsModalOpen} onUserSelect={handleUserSelect} content={<div>Select a user to start a conversation</div>} chatService={chatService} />
+            )}
             <div className="h-full overflow-y-scroll py-2">
                 {conversations.map((conversation, index) => {
                     return (

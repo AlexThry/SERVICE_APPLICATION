@@ -92,4 +92,37 @@ export class ChatService {
             throw error;
         });
     }
+
+    getAllUsers() {
+        return axios.get(`http://localhost:3000/users`, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+            }
+        })
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+            console.error('Error fetching users:', error);
+            throw error;
+        });
+    }
+
+    createConversation(userIds: string[], name: string) {
+        return axios.post(`http://localhost:3000/chat/createConversation`, {
+            userIds,
+            name
+        }, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+            }
+        })
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+            console.error('Error creating conversation:', error);
+            throw error;
+        });
+    }
 }

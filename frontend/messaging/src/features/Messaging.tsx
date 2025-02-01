@@ -1,13 +1,27 @@
 import Conversations from '../components/Conversations';
 import Chat from '../components/Chat';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChatService } from '../services/ChatService';
 
 function Messaging() {
     const [selectedConversation, setSelectedConversation] = useState('');
-    const [lastConversation, setLastConversation] = useState('')
+    const [lastConversation, setLastConversation] = useState('');
+    const [conversationName, setConversationName] = useState('');
 
-    let chatService: ChatService = new ChatService()
+    let chatService: ChatService = new ChatService();
+
+    useEffect(() => {
+        async function fetchConversationName() {
+            if (selectedConversation) {
+                const conversations = await chatService.getUserConversations(sessionStorage.getItem('user_id') || '');
+                const conversation = conversations.find((conv: any) => conv._id === selectedConversation);
+                if (conversation) {
+                    setConversationName(conversation.name || 'Unnamed Conversation');
+                }
+            }
+        }
+        fetchConversationName();
+    }, [selectedConversation]);
 
     return (
         <>
@@ -24,7 +38,7 @@ function Messaging() {
                         setLastConversation={setLastConversation}
                         chatService={chatService}
                         selectedConversation={selectedConversation}
-                        user="Andreea"
+                        user={conversationName}
                     />
                 </div>
             </div>
