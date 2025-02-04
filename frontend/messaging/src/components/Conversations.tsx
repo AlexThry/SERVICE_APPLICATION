@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ChatService } from '../services/ChatService';
+import { ChatService } from '../services/Chat.service';
 import Conversation from './Conversation';
 import { ConversationObject } from '../objects/ConversationObject';
 import Modal from './Modal';

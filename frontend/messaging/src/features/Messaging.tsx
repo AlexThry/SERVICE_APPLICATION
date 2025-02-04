@@ -1,7 +1,7 @@
 import Conversations from '../components/Conversations';
 import Chat from '../components/Chat';
 import { useState, useEffect } from 'react';
-import { ChatService } from '../services/ChatService';
+import { ChatService } from '../services/Chat.service';
 
 function Messaging() {
     const [selectedConversation, setSelectedConversation] = useState('');

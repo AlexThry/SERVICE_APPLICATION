@@ -27,7 +27,6 @@ function Auth() {
         ).value;
         setIsLoading(true);
         // TODO: supprimer le timeout
-        await new Promise((resolve) => setTimeout(resolve, 2000));
         const response = await authService.login(username, password);
         if (response && response.access_token) {
             sessionStorage.setItem('access_token', response.access_token);
@@ -44,7 +43,6 @@ function Auth() {
 
     const handleRegister = async () => {
         setIsLoading(true);
-        await new Promise((resolve) => setTimeout(resolve, 2000));
         const username = (
             document.querySelector('input[name="username"]') as HTMLInputElement
         ).value;

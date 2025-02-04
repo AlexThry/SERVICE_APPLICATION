@@ -121,7 +121,7 @@ const Editor: React.FC<EditorProps> = ({
     useEffect(() => {
         let timer: NodeJS.Timeout;
 
-        const handleKeyDown = () => {
+        const handleContentChange = () => {
             clearTimeout(timer);
             timer = setTimeout(() => {
                 const updatedContent = editor?.getHTML();
@@ -130,12 +130,12 @@ const Editor: React.FC<EditorProps> = ({
         };
 
         if (editor) {
-            editor.view.dom.addEventListener('keydown', handleKeyDown);
+            editor.on('update', handleContentChange);
         }
 
         return () => {
             if (editor) {
-                editor.view.dom.removeEventListener('keydown', handleKeyDown);
+                editor.off('update', handleContentChange);
             }
             clearTimeout(timer);
         };

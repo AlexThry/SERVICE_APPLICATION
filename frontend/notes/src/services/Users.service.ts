@@ -10,10 +10,14 @@ export class UserService {
 
     async getUsers() {
         try {
-            const response = await axios.get('http://localhost:3000/users')
-            return response.data
+            const response = await axios.get('http://localhost:3000/users', {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+                }
+            });
+            return response.data;
         } catch (error) {
-            return
+            return;
         }
     }
 }

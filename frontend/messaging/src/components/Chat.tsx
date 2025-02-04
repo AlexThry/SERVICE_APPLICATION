@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import Message, { MessageProps } from '../components/Message';
 import { useState } from 'react';
-import { ChatService } from '../services/ChatService';
+import { ChatService } from '../services/Chat.service';
 
 interface MessagingProps {
     chatService: ChatService;

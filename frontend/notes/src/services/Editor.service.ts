@@ -6,6 +6,10 @@ export class EditorService {
             await axios.put('http://localhost:3000/notes', {
                 noteId,
                 content
+            }, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+                }
             });
         } catch (error) {
             console.error('Error saving content:', error);
@@ -15,7 +19,11 @@ export class EditorService {
 
     async getUserNotes(userId: string, page: number): Promise<any> {
         try {
-            const response = await axios.get(`http://localhost:3000/notes/user/${userId}/${page}`);
+            const response = await axios.get(`http://localhost:3000/notes/user/${userId}/${page}`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+                }
+            });
             return response.data;
         } catch (error) {
             console.error('Error fetching user notes:', error);
@@ -25,7 +33,11 @@ export class EditorService {
 
     async getNote(noteId: string): Promise<string> {        
         try {
-            const response = await axios.get(`http://localhost:3000/notes/${noteId}`);
+            const response = await axios.get(`http://localhost:3000/notes/${noteId}`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+                }
+            });
             return response.data;
         } catch (error) {
             console.error('Error fetching content:', error);
@@ -36,8 +48,12 @@ export class EditorService {
     async createNote(userId: string, title: string) {
         try {
             const response = await axios.post('http://localhost:3000/notes', {
-            userId,
-            title
+                userId,
+                title
+            }, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+                }
             });
             return response.data;
         } catch (error) {
@@ -52,10 +68,14 @@ export class EditorService {
             const response = await axios.put('http://localhost:3000/notes/addUser', {
                 noteId,
                 userId
-            })
-            return response.status
+            }, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+                }
+            });
+            return response.status;
         } catch (error) {
-            return
+            return;
         }
     }
 }

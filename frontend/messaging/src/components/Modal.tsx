@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react';
-import { ChatService } from '../services/ChatService';
+import { ChatService } from '../services/Chat.service';
 
 interface ModalProps {
     setIsModalOpen: (isOpen: boolean) => void;

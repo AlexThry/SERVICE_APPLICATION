@@ -10,7 +10,7 @@ import { MongooseModule } from '@nestjs/mongoose';
         UsersModule,
         AuthModule,
         MongooseModule.forRoot(
-            'mongodb://localhost:27017/',
+            'mongodb://mongo:27017/',
         ),
     ],
     controllers: [UserMicroserviceController],
